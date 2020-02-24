@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class LinkedList {
     private class Node {
         private int value;
@@ -10,6 +12,7 @@ public class LinkedList {
 
     private Node first;
     private Node last;
+    private int size;
 
     public void addLast(int item) {
         Node node = new Node(item);
@@ -20,18 +23,21 @@ public class LinkedList {
             last.next = node;
             last = node;
         }
+
+        size++;
     }
 
     public void addFirst(int item) {
         Node node = new Node(item);
 
-        if(isEmpty()){
+        if (isEmpty()) {
             first = last = node;
-        }
-        else{
+        } else {
             node.next = first;
             first = node;
         }
+
+        size++;
     }
 
     private boolean isEmpty() {
@@ -65,11 +71,12 @@ public class LinkedList {
         if (first == last) {
             first = last = null;
             return;
+        } else {
+            Node second = first.next;
+            first.next = null;
+            first = second;
         }
-
-        Node second = first.next;
-        first.next = null;
-        first = second;
+        size--;
     }
 
     public void removeLast() {
@@ -81,13 +88,14 @@ public class LinkedList {
         }
 
         //if there is only one node
-        if (first == last){
+        if (first == last) {
             first = last = null;
+        } else {
+            Node previous = getPrevious(last);
+            last = previous;
+            last.next = null;
         }
-
-        Node previous = getPrevious(last);
-        last = previous;
-        last.next = null;
+        size--;
     }
 
     private Node getPrevious(Node node) {
@@ -101,15 +109,58 @@ public class LinkedList {
         return null;
     }
 
+    public int size() {
+        return size;
+    }
+
+    public int[] toArray() {
+        int[] array = new int[size];
+        Node current = first;
+        int index = 0;
+        while (current != null) {
+            array[index++] = current.value;
+            current = current.next;
+        }
+
+        return array;
+    }
+
+    public void reverse() {
+
+        if (isEmpty()) return;
+
+        Node previous = first;
+        Node current = first.next;
+        while (current != null) {
+            Node next = current.next;
+            current.next = previous;
+            previous = current;
+            current = next;
+        }
+        last = first;
+        last.next = null;
+        first = previous;
+    }
+
+//    public int getKthFromTheEnd(int k) {
+// TODO
+//
+//    }
+
 
     public static void main(String[] args) {
 
         LinkedList list = new LinkedList();
         list.addLast(10);
         list.addLast(20);
+        list.addFirst(40);
         list.addFirst(30);
-        list.removeLast();
+        list.addLast(50);
+//        list.removeLast();
+//        System.out.println(list.size);
+        list.reverse();
 
+        System.out.println(Arrays.toString(list.toArray()));
 //        System.out.println(list.indexOf(20));
 //        System.out.println(list.contains(40));
 //        System.out.println(list.first);
