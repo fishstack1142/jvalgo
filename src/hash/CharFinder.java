@@ -1,14 +1,20 @@
 package hash;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class CharFinder {
 
     public static void main(String[] args) {
-        CharFinder charFinder =  new CharFinder();
-        char ch = charFinder.findFirstNonRepeatingChar("a green a apple");
-        System.out.println(ch);
+//        CharFinder charFinder =  new CharFinder();
+//        char ch = charFinder.findFirstNonRepeatingChar("a green a apple");
+//        System.out.println(ch);
+
+        CharFinder finder = new CharFinder();
+        char ch2 = finder.findFirstRepeatedChar("green apple");
+        System.out.println(ch2);
 
     }
 
@@ -35,6 +41,19 @@ public class CharFinder {
         for (char ch : chars)
             if (map.get(ch) == 1)
                 return ch;
+
+        return Character.MIN_VALUE;
+    }
+
+    public char findFirstRepeatedChar(String str) {
+        Set<Character> set = new HashSet<>();
+
+        for (char ch : str.toCharArray()) {
+            if (set.contains(ch))
+                return ch;
+
+            set.add(ch);
+        }
 
         return Character.MIN_VALUE;
     }
