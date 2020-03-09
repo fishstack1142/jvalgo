@@ -54,15 +54,15 @@ public class AVLTree {
             if (balanceFactor(root.leftChild) < 0)
                 root.leftChild = rotateLeft(root.leftChild);
                 System.out.println("Left Rotate " + root.leftChild.value);
-               return rotateRight(root);
             System.out.println("Right Rotate " + root.value);
+               return rotateRight(root);
         } else if (isRightHeavy(root)) {
             System.out.println(root.value + " is right heavy");
             if (balanceFactor(root.rightChild) > 0)
                 root.rightChild = rotateRight(root.rightChild);
-            return rotateLeft(root);
                 System.out.println("Right Rotate " + root.rightChild.value);
             System.out.println("Left Rotate " + root.value);
+            return rotateLeft(root);
         }
         return root;
     }
