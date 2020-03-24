@@ -7,6 +7,20 @@ import java.util.Map;
 
 public class Graph {
 
+    public static void main(String[] args) {
+        Graph graph = new Graph();
+
+        graph.addNode("A");
+        graph.addNode("B");
+        graph.addNode("C");
+        graph.addNode("D");
+        graph.addEdge("A", "B");
+        graph.addEdge("A", "C");
+        graph.addEdge("B", "C");
+        graph.removeEdge("A", "C");
+        graph.print();
+    }
+
 
     private class Node {
         private String label;
@@ -50,5 +64,28 @@ public class Graph {
             if (!targets.isEmpty())
                 System.out.println(source + " is connected to " + targets);
         }
+    }
+
+    public void removeNode(String label) {
+        Node node = nodes.get(label);
+        if (node == null)
+            return;
+
+        for (Node n : adjacencyList.keySet())
+            adjacencyList.get(n).remove(node);
+
+        adjacencyList.remove(node);
+        nodes.remove(node);
+    }
+
+    public void removeEdge(String from, String to) {
+        Node fromNode = nodes.get(from);
+        Node toNode = nodes.get(to);
+
+        if (fromNode == null || toNode == null)
+            return;
+
+        adjacencyList.get(fromNode).remove(toNode);
+
     }
 }
