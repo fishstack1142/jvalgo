@@ -17,7 +17,8 @@ public class Graph {
         graph.addEdge("A", "C");
 //        graph.removeEdge("A", "C");
 //        graph.print();
-        graph.traverseDepthFirst("C");
+//        graph.traverseDepthFirst("C");
+        graph.traverseBreadthFirst("C");
     }
 
 
@@ -105,4 +106,52 @@ public class Graph {
                 traverseDepthFirst(node, visited);
     }
 
+    public void traverseDepthFirstIterative(String root) {
+        Node node = nodes.get(root);
+        if (node == null)
+            return;
+
+        Set<Node> visited = new HashSet<>();
+        Stack<Node> stack = new Stack<>();
+        stack.push(node);
+
+        while (!stack.isEmpty()){
+            Node current = stack.pop();
+
+            if (visited.contains(current))
+                continue;
+
+            System.out.println(current);
+            visited.add(current);
+
+            for (Node neighbour : adjacencyList.get(current))
+                if (!visited.contains(neighbour))
+                    stack.push(neighbour);
+        }
+    }
+
+    public void traverseBreadthFirst(String root) {
+        Node node = nodes.get(root);
+        if (node == null)
+            return;
+
+        Set<Node> visited = new HashSet<>();
+
+        Queue<Node> queue = new ArrayDeque<>();
+        queue.add(node);
+
+        while (!queue.isEmpty()) {
+            Node current = queue.remove();
+
+            if (visited.contains(current))
+                continue;;
+
+            System.out.println(current);
+            visited.add(current);
+
+            for (Node neighbour : adjacencyList.get(current))
+                if (!visited.contains(neighbour))
+                    queue.add(neighbour);
+        }
+    }
 }
