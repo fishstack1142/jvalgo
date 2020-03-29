@@ -1,9 +1,6 @@
 package graph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Graph {
 
@@ -15,10 +12,12 @@ public class Graph {
         graph.addNode("C");
         graph.addNode("D");
         graph.addEdge("A", "B");
+        graph.addEdge("B", "D");
+        graph.addEdge("D", "C");
         graph.addEdge("A", "C");
-        graph.addEdge("B", "C");
-        graph.removeEdge("A", "C");
-        graph.print();
+//        graph.removeEdge("A", "C");
+//        graph.print();
+        graph.traverseDepthFirst("C");
     }
 
 
@@ -88,4 +87,22 @@ public class Graph {
         adjacencyList.get(fromNode).remove(toNode);
 
     }
+
+    public void traverseDepthFirst(String root) {
+        Node node = nodes.get(root);
+        if (node == null)
+            return;
+
+        traverseDepthFirst(node, new HashSet<>());
+    }
+
+    private void traverseDepthFirst(Node root, Set<Node> visited) {
+        System.out.println(root);
+        visited.add(root);
+
+        for (Node node : adjacencyList.get(root))
+            if (!visited.contains(node))
+                traverseDepthFirst(node, visited);
+    }
+
 }
