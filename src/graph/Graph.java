@@ -7,18 +7,29 @@ public class Graph {
     public static void main(String[] args) {
         Graph graph = new Graph();
 
-        graph.addNode("A");
-        graph.addNode("B");
-        graph.addNode("C");
-        graph.addNode("D");
-        graph.addEdge("A", "B");
-        graph.addEdge("B", "D");
-        graph.addEdge("D", "C");
-        graph.addEdge("A", "C");
+//        graph.addNode("A");
+//        graph.addNode("B");
+//        graph.addNode("C");
+//        graph.addNode("D");
+//        graph.addEdge("A", "B");
+//        graph.addEdge("B", "D");
+//        graph.addEdge("D", "C");
+//        graph.addEdge("A", "C");
 //        graph.removeEdge("A", "C");
 //        graph.print();
 //        graph.traverseDepthFirst("C");
-        graph.traverseBreadthFirst("C");
+//        graph.traverseBreadthFirst("C");
+
+        graph.addNode("X");
+        graph.addNode("A");
+        graph.addNode("B");
+        graph.addNode("P");
+        graph.addEdge("X", "A");
+        graph.addEdge("X", "B");
+        graph.addEdge("A", "P");
+        graph.addEdge("B", "P");
+        List<String> list = graph.topologicalSort();
+        System.out.println(list);
     }
 
 
@@ -153,5 +164,31 @@ public class Graph {
                 if (!visited.contains(neighbour))
                     queue.add(neighbour);
         }
+    }
+
+    public List<String> topologicalSort() {
+        Stack<Node> stack = new Stack<>();
+        Set<Node> visited = new HashSet<>();
+
+        for (Node node : nodes.values())
+          topologicalSort(node, visited, stack);
+
+        List<String> sorted = new ArrayList<>();
+        while (!stack.empty())
+            sorted.add(stack.pop().label);
+
+        return sorted;
+    }
+
+    private void topologicalSort (Node node, Set<Node> visited, Stack<Node> stack){
+        if (visited.contains(node))
+            return;
+
+        visited.add(node);
+
+        for (Node neighbour : adjacencyList.get(node))
+            topologicalSort(neighbour, visited, stack);
+
+        stack.push(node);
     }
 }
