@@ -7,29 +7,31 @@ public class Graph {
     public static void main(String[] args) {
         Graph graph = new Graph();
 
-//        graph.addNode("A");
-//        graph.addNode("B");
-//        graph.addNode("C");
+        graph.addNode("A");
+        graph.addNode("B");
+        graph.addNode("C");
 //        graph.addNode("D");
-//        graph.addEdge("A", "B");
+        graph.addEdge("A", "B");
+        graph.addEdge("B", "C");
 //        graph.addEdge("B", "D");
 //        graph.addEdge("D", "C");
-//        graph.addEdge("A", "C");
+        graph.addEdge("C", "A");
 //        graph.removeEdge("A", "C");
 //        graph.print();
 //        graph.traverseDepthFirst("C");
 //        graph.traverseBreadthFirst("C");
+        System.out.println(graph.hasCycle());
 
-        graph.addNode("X");
-        graph.addNode("A");
-        graph.addNode("B");
-        graph.addNode("P");
-        graph.addEdge("X", "A");
-        graph.addEdge("X", "B");
-        graph.addEdge("A", "P");
-        graph.addEdge("B", "P");
-        List<String> list = graph.topologicalSort();
-        System.out.println(list);
+//        graph.addNode("X");
+//        graph.addNode("A");
+//        graph.addNode("B");
+//        graph.addNode("P");
+//        graph.addEdge("X", "A");
+//        graph.addEdge("X", "B");
+//        graph.addEdge("A", "P");
+//        graph.addEdge("B", "P");
+//        List<String> list = graph.topologicalSort();
+//        System.out.println(list);
     }
 
 
@@ -190,5 +192,43 @@ public class Graph {
             topologicalSort(neighbour, visited, stack);
 
         stack.push(node);
+    }
+
+    public boolean hasCycle() {
+        Set<Node> all = new HashSet<>();
+        all.addAll(nodes.values());
+
+        Set<Node> visiting = new HashSet<>();
+        Set<Node> visited = new HashSet<>();
+
+        while (!all.isEmpty()) {
+            Node current = all.iterator().next();
+            if (hasCycle(current, all, visiting, visited))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean hasCycle(Node node, Set<Node> all,
+                             Set<Node> visiting, Set<Node> visited) {
+        all.remove(node);
+        visiting.add(node);
+
+        for (Node neighbour: adjacencyList.get(node)) {
+            if (visited.contains(neighbour))
+                continue;
+
+            if (visiting.contains(neighbour))
+                return true;
+
+            if (hasCycle(neighbour, all, visiting, visited))
+                return true;
+
+        }
+
+        visiting.remove(node);
+        visited.add(node);
+
+        return false;
     }
 }
