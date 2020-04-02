@@ -24,13 +24,26 @@ public class WeightedGraph {
 //        System.out.println(path);
 
 
+//        graph.addNode("A");
+//        graph.addNode("B");
+//        graph.addNode("C");
+//        graph.addEdge("A", "B", 0);
+//        graph.addEdge("B", "C", 0);
+//        graph.addEdge("C", "A", 0);
+//        System.out.println(graph.hasCycle());
+
         graph.addNode("A");
         graph.addNode("B");
         graph.addNode("C");
-        graph.addEdge("A", "B", 0);
-        graph.addEdge("B", "C", 0);
-        graph.addEdge("C", "A", 0);
-        System.out.println(graph.hasCycle());
+        graph.addNode("D");
+        graph.addEdge("A","B", 3);
+        graph.addEdge("B","D", 4);
+        graph.addEdge("C","D", 5);
+        graph.addEdge("A","C", 1);
+        graph.addEdge("B","C", 2);
+        WeightedGraph tree = graph.getMinimumSpanningTree();
+        tree.print();
+
     }
 
 
@@ -190,10 +203,47 @@ public class WeightedGraph {
 
          if (visited.contains(edge.to) || hasCycle(edge.to, node, visited))
              return true;
-
         }
 
         return false;
     }
 
+
+    public WeightedGraph getMinimumSpanningTree() {
+        WeightedGraph tree = new WeightedGraph();
+
+        if (nodes.isEmpty())
+            return tree;
+
+        PriorityQueue<Edge> edges = new PriorityQueue<>(
+                Comparator.comparingInt(e -> e.weight)
+        );
+
+        Node startNode = nodes.values().iterator().next();
+        edges.addAll(startNode.getEdges());
+        tree.addNode(startNode.label);
+
+        if (edges.isEmpty())
+            return tree;
+
+        while (tree.nodes.size() < nodes.size()) {
+            Edge minEdge = edges.remove();
+            Node nextNode = minEdge.to;
+
+            if (tree.containsNode(nextNode.label))
+                continue;
+
+            tree.addNode(nextNode.label);
+            tree.addEdge(minEdge.from.label, nextNode.label, minEdge.weight);
+
+            for (Edge edge : nextNode.getEdges())
+                if (!tree.containsNode(edge.to.label))
+                    edges.add(edge);
+        }
+        return tree;
+    }
+
+    public boolean containsNode(String label) {
+        return nodes.containsKey(label);
+    }
 }
